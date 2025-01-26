@@ -9,41 +9,21 @@ configDotenv();
 
 const app = express();
 const port = process.env.PORT || 8000;
-// Middleware to parse JSON and URL-encoded data
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-const summaryText =
-  "I am a motivated Full Stack Developer with hands-on experience in building web applications. I’m skilled in front-end and back-end development and focus on writing clean, efficient code. I enjoy working as a team, sharing ideas, and learning from others. I’m excited to take on new challenges and use new technologies to create innovative solutions and improve development.";
 
 app.post("/", (req, res) => {
   try {
 
-    const Skills = [
-      {
-        skillsText: "React.js, HTML, CSS, JavaScript, Bootstrap, Tailwind",
-        field: "Frontend:",
-      },
-      {
-        skillsText: "Node.js, Express.js, MongoDB, Firebase",
-        field: "Backend:",
-      },
-      {
-        skillsText: "Git, GitHub, VS Code, Heroku, Netlify",
-        field: "Tools:",
-      },
-      {
-        skillsText: "Node.js, Express.js, MongoDB, Firebase",
-        field: "Backend:",
-      },
-    ];
+    const { summaryText, summryTitle, skillsTitle, Skills, projectSectionHeading, getFirstProjectTitle, firstProjectURL, firstProjectArray, getSirstProjectTitle, secondProjectURL, secondProjectArray, awardsAndAchievementsTitle  } = req.body;
 
     const defaultOptions = {
       margins: { top: 0, left: 0, right: 0, bottom: 0 },
       layout: 'portrait',
     };
     
-    // Initialize PDF document with default options
+    // Default options
     const myPDF = new PDFDocument({ 
       layout: defaultOptions.layout, 
       margins: defaultOptions.margins 
@@ -53,11 +33,9 @@ app.post("/", (req, res) => {
     //const pdfName = new Date().getTime() + ".pdf";
 
     // contact section
-    //const yourName = req.body.yourName;
     contactSection(myPDF, req.body);
 
     //Summry heading
-    const summryTitle = "Summary";
     const summryTitleHeight = myPDF.heightOfString(summryTitle, {
       fontSize: 12,
     });
@@ -87,7 +65,6 @@ app.post("/", (req, res) => {
     // end of summary
 
     // Technical Skills heading
-    const skillsTitle = "Technical Skills";
     const skillsTitleHeight = myPDF.heightOfString(skillsTitle, {
       fontSize: 12,
     });
@@ -100,7 +77,6 @@ app.post("/", (req, res) => {
     drawLine(myPDF, (height += skillsTitleHeight), lineLeft);
 
     // skills
-
     Skills.forEach((skill) => {
       // Calculate the heights
       const fieldWidth = myPDF.widthOfString(skill.field, { fontSize: 11 });
@@ -129,7 +105,6 @@ app.post("/", (req, res) => {
     // end of skills
 
     // Projects Section Start
-    const projectSectionHeading = "Projects";
     const projectSectionHeadingHeight = myPDF.heightOfString(
       projectSectionHeading,
       { fontSize: 12 }
@@ -143,13 +118,12 @@ app.post("/", (req, res) => {
     drawLine(myPDF, (height += projectSectionHeadingHeight), lineLeft);
 
     // First Project Title
-    const firstProjectURL = "https://internshipyatra.ravikhokle.site";
-    const firstProjectTitle = "Developed a Web-Based Project Platform -";
+    const firstProjectTitle = `${getFirstProjectTitle} -`;
     const firstProjectTitleWidth = myPDF.widthOfString(firstProjectTitle, {
       fontSize: 11,
     });
-    const SecondProjectURL = "https://internshipyatra.ravikhokle.site";
-    const SecondProjectTitle = "Developed a Web-Based Project Platform -";
+  
+    const SecondProjectTitle = `${getSirstProjectTitle} -`;
     const SecondProjectTitleWidth = myPDF.widthOfString(SecondProjectTitle, {
       fontSize: 11,
     });
@@ -166,11 +140,6 @@ app.post("/", (req, res) => {
         underline: true,
       });
 
-    const firstProjectArray = [
-      "Ravi is working on pdf generate project Created a platform to connect students with Project opportunities.",
-      "Intern Functionality: Students can browse and apply for Projects.",
-      "HR Functionality: HR can publish, update, and delete Projects, as well as review applicants’ resumes and profiles.",
-    ];
     const firstProjectArrayHeight = myPDF.heightOfString(firstProjectArray, {
       fontSize: 11,
     });
@@ -195,15 +164,10 @@ app.post("/", (req, res) => {
       .fontSize(10)
       .fillColor("blue")
       .text("Link", SecondProjectTitleWidth + 15, height, {
-        link: SecondProjectURL,
+        link: secondProjectURL,
         underline: true,
       });
 
-    const secondProjectArray = [
-      "Created a platform to connect students with Project opportunities.",
-      "Intern Functionality: Students can browse and apply for Projects.",
-      "HR Functionality: HR can publish, update, and delete Projects, as well as review applicants’ resumes and profiles.",
-    ];
     const secondProjectArrayHeight = myPDF.heightOfString(secondProjectArray, {
       fontSize: 11,
     });
@@ -215,13 +179,12 @@ app.post("/", (req, res) => {
       .list(secondProjectArray, { bulletRadius: 2.5 });
 
     //Awards & Achievements Section Start
-    const awardsAndAchievements = "Awards & Achievements";
     myPDF.font(fonts[1]);
     myPDF
       .fillColor("black")
       .fontSize(12)
       .text(
-        awardsAndAchievements,
+        awardsAndAchievementsTitle,
         headingLeft,
         (height += secondProjectArrayHeight + 30)
       );
