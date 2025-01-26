@@ -1,19 +1,14 @@
-import PDFDocument from "pdfkit";
 
-const contactSection = (myPDF) => {
-  const resumeNumber = "+91 7218014410";
-  const resumeEmail = "ravikhokle1@gmail.com";
+const contactSection = (myPDF, data) => {
+  const { name, resumeNumber, resumeEmail, GitHubURL, LinkedInURL } = data;
+  const resumeName = name.toUpperCase();
+
+  // need for calculating width.
   const resumeLinkedIn = "linkedin.com";
   const resumeGitHub = "github.com";
-  const GitHubURL = "https://github.com/ravikhokle";
-  const LinkedInURL = "https://www.linkedin.com/in/ravikhokle";
-  const Name = "Ravi Khokle";
-  const resumeName = Name.toUpperCase();
 
-  // set the title of the PDF
   myPDF.fontSize(24).text(resumeName, { align: "center" }, 22);
 
-  // Add the phone icon and number
   const phoneIconX = 150;
   myPDF.image("./functions/icons/call.png", phoneIconX, 49, {
     fit: [10, 10],
@@ -28,7 +23,7 @@ const contactSection = (myPDF) => {
   myPDF.fontSize(10).text(resumeNumber, phoneTextX, 50);
 
   // Add the email
-  const numberWidth = myPDF.widthOfString(resumeNumber, { fontSize: 10 }); // Width of email text
+  const numberWidth = myPDF.widthOfString(resumeNumber, { fontSize: 10 });
   const emailIconX = phoneTextX + numberWidth + paddingAfterIcon; // Starting position for the email icon
   myPDF.image("./functions/icons/email.png", emailIconX, 49, {
     fit: [10, 10],
@@ -71,7 +66,6 @@ const contactSection = (myPDF) => {
   myPDF
     .fontSize(10)
     .text(resumeGitHub, githubTextX, 50, { link: GitHubURL, underline: true });
-  // end of contact details
 };
 
 export default contactSection;
