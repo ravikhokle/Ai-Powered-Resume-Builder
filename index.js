@@ -3,9 +3,12 @@ import PDFDocument from "pdfkit";
 import fs from "fs";
 import drawLine from "./functions/drowLine.js";
 import contactSection from "./functions/contactSection.js";
+import { configDotenv } from "dotenv";
+
+configDotenv();
 
 const app = express();
-const port = 5000;
+const port = process.env.PORT;
 const summaryText =
   "I am a motivated Full Stack Developer with hands-on experience in building web applications. I’m skilled in front-end and back-end development and focus on writing clean, efficient code. I enjoy working as a team, sharing ideas, and learning from others. I’m excited to take on new challenges and use new technologies to create innovative solutions and improve development.";
 

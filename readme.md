@@ -1,0 +1,1 @@
+Welcome to my AI-powered Resume Builder project! This tool helps freshers, especially web developers, to create resumes for internships and entry-level jobs.
