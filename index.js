@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.post("/", (req, res) => {
   try {
 
-    const { summaryText, summryTitle, skillsTitle, Skills, projectSectionHeading, getFirstProjectTitle, firstProjectURL, firstProjectArray, getSirstProjectTitle, secondProjectURL, secondProjectArray, awardsAndAchievementsTitle  } = req.body;
+    const { summaryText, summryTitle, skillsTitle, Skills, projectSectionHeading, getFirstProjectTitle, firstProjectURL, firstProjectArray, getSirstProjectTitle, secondProjectURL, secondProjectArray, awardsAndAchievementsTitle, awardList, EducationSection, degreeName, universityName, Years, degreeStartDate, degreeEndDate, hobbiesAndInterests, hobbiesAndInterestsArray  } = req.body;
 
     const defaultOptions = {
       margins: { top: 0, left: 0, right: 0, bottom: 0 },
@@ -190,18 +190,6 @@ app.post("/", (req, res) => {
       );
     drawLine(myPDF, (height += 13), lineLeft);
 
-    // Awards list
-    const awardList = [
-      {
-        boldText: "C, C++:",
-        normalText: "Compilation Certificates from Devansh Edu Tech Parbhani.",
-      },
-      {
-        boldText: "Full Stack Web Development:",
-        normalText: "Certificate from Udemy",
-      },
-    ];
-
     awardList.forEach((award) => {
       // Calculate the heights
       const boldTextWidth = myPDF.widthOfString(award.boldText, {
@@ -230,26 +218,15 @@ app.post("/", (req, res) => {
       height += currentElementHeight + 5;
     });
 
-    // Education
-
-    const EducationSection = "Education";
     myPDF.font(fonts[1]);
     myPDF
       .fillColor("black")
       .fontSize(12)
       .text(EducationSection, headingLeft, (height += 20));
-
     drawLine(myPDF, (height += 13), lineLeft);
-    const degreeName = "BCA (Bachelor of Computer Applications)";
-    const universityName = "SRTMU Nanded";
     const universityNameWidth = myPDF.widthOfString(universityName, {
       fontSize: 11,
     });
-    const Years = [
-      "BCA-FY CGPA: 7.15",
-      "BCA-SY CGPA: 7.25",
-      "Currently pursuing BCA-TY",
-    ];
 
     const widthForShowUniversityName =
       myPDF.page.width - universityNameWidth - headingLeft;
@@ -265,9 +242,6 @@ app.post("/", (req, res) => {
       .fillColor("black")
       .fontSize(11)
       .text(universityName, widthForShowUniversityName, height, { width });
-
-    const degreeStartDate = "July 2022";
-    const degreeEndDate = "August 2025";
 
     myPDF
       .font(fonts[0])
@@ -290,8 +264,6 @@ app.post("/", (req, res) => {
     const yearHeight = myPDF.heightOfString(Years, { fontSize: 11 });
 
     // Hobbies and Interests
-
-    const hobbiesAndInterests = "Hobbies/Interests";
     myPDF
       .font(fonts[1])
       .fillColor("black")
@@ -301,14 +273,6 @@ app.post("/", (req, res) => {
       });
 
     drawLine(myPDF, (height += 12), lineLeft);
-
-    const hobbiesAndInterestsArray = [
-      "Learning new Technologies",
-      "Exploring new things",
-      "Blogging",
-      "Traveling",
-      "Gaming",
-    ];
 
   hobbiesAndInterestsArray.forEach((hobby) => {
   const hobbyTextHeight = myPDF.heightOfString(hobby, { fontSize: 10 });
