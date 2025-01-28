@@ -4,6 +4,7 @@ import drawLine from "../utils/drowLine.js";
 import contactSection from "../utils/contactSection.js";
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { v4 as uuidv4 } from 'uuid';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -280,7 +281,7 @@ const simpleResume = (req, res) => {
         height += hobbyTextHeight + 5; // Increment the current height for the next item
     });
 
-        const pdfPathAndName = "../resumePDFs/" + new Date().getTime() + ".pdf";
+        const pdfPathAndName = `../resumePDFs/${uuidv4()}-${Date.now()}.pdf`;
         const filePath = path.join(__dirname, pdfPathAndName);
         const writeStream = fs.createWriteStream(filePath);
         myPDF.pipe(writeStream);
