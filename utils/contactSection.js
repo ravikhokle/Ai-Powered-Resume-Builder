@@ -10,7 +10,7 @@ const contactSection = (myPDF, data) => {
   myPDF.fontSize(24).text(resumeName, { align: "center" }, 22);
 
   const phoneIconX = 150;
-  myPDF.image("./functions/icons/call.png", phoneIconX, 49, {
+  myPDF.image("./utils/icons/call.png", phoneIconX, 49, {
     fit: [10, 10],
     align: "center",
     valign: "center",
@@ -25,7 +25,7 @@ const contactSection = (myPDF, data) => {
   // Add the email
   const numberWidth = myPDF.widthOfString(resumeNumber, { fontSize: 10 });
   const emailIconX = phoneTextX + numberWidth + paddingAfterIcon; // Starting position for the email icon
-  myPDF.image("./functions/icons/email.png", emailIconX, 49, {
+  myPDF.image("./utils/icons/email.png", emailIconX, 49, {
     fit: [10, 10],
     align: "center",
     valign: "center",
@@ -38,7 +38,7 @@ const contactSection = (myPDF, data) => {
   const emailWidth = myPDF.widthOfString(resumeEmail, { fontSize: 10 });
   const linkedInIconX = emailTextX + emailWidth + paddingAfterIcon;
   myPDF
-    .image("./functions/icons/linkedin.png", linkedInIconX, 49, {
+    .image("./utils/icons/linkedin.png", linkedInIconX, 49, {
       fit: [10, 10],
       align: "center",
       valign: "center",
@@ -55,7 +55,7 @@ const contactSection = (myPDF, data) => {
   const linkedInWidth = myPDF.widthOfString(resumeLinkedIn, { fontSize: 10 });
   const githubIconX = linkedInTextX + linkedInWidth + paddingAfterIcon;
   myPDF
-    .image("./functions/icons/github.png", githubIconX, 49, {
+    .image("./utils/icons/github.png", githubIconX, 49, {
       fit: [10, 10],
       align: "center",
       valign: "center",
