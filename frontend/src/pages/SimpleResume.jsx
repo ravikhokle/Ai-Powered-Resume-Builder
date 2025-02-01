@@ -85,8 +85,12 @@ const SimpleResume = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const apiURL = "https://ai-powered-resume-builder.ravikhokle.site";
-      const response = await axios.post(apiURL, formData);
+      const apiURL = "http://localhost:5000/api/simpleResume";
+      const response = await axios.post(apiURL, formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
       setResponse({
         message: response.data.message,
         resumeLink: response.data.resumeLink,
