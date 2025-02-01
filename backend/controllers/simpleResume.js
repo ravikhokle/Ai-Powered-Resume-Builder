@@ -1,16 +1,9 @@
 import PDFDocument from "pdfkit";
-import fs from "fs";
 import drawLine from "../utils/drowLine.js";
 import contactSection from "../utils/contactSection.js";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import { v4 as uuidv4 } from "uuid";
 import uploadToCloudinary from "../lib/cloudnary.js";
-import deleteLocalFile from "../lib/deleteLocalFile.js";
 import stream from "stream";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const simpleResume = async (req, res) => {
   try {
@@ -37,6 +30,8 @@ const simpleResume = async (req, res) => {
       hobbiesAndInterests,
       hobbiesAndInterestsArray,
     } = req.body;
+
+    console.log(req.body.name)
 
     const defaultOptions = {
       margins: { top: 0, left: 0, right: 0, bottom: 0 },
