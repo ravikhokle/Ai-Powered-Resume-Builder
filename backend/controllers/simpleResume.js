@@ -152,7 +152,7 @@ const simpleResume = async (req, res) => {
     myPDF
       .fontSize(10)
       .fillColor("blue")
-      .text("Link", firstProjectTitleWidth + 15, height, {
+      .text("Link", firstProjectTitleWidth + 20, height, {
         link: firstProjectURL,
         underline: true,
       });
@@ -180,7 +180,7 @@ const simpleResume = async (req, res) => {
     myPDF
       .fontSize(10)
       .fillColor("blue")
-      .text("Link", SecondProjectTitleWidth + 15, height, {
+      .text("Link", SecondProjectTitleWidth + 20, height, {
         link: secondProjectURL,
         underline: true,
       });

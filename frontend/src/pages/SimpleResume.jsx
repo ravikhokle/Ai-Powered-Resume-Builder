@@ -20,6 +20,7 @@ const SimpleResume = () => {
     LinkedInURL: "",
     summryTitle: "Professional Summary",
     summaryText: "",
+    skillsTitle: "Technical Skills",
     Skills: [
       {
         field: "",
@@ -478,7 +479,7 @@ const SimpleResume = () => {
             </div>
           ))}
         </div>
-
+        <p className="text-sm">📝 Note: This is a resume template designed with fixed sizes and fields to ensure optimal formatting. To create the best version of your resume, <span className="text-red-600">please fill out all fields.</span></p>
         <button
           type="submit"
           className="w-full py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
