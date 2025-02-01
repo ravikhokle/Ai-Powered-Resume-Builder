@@ -57,7 +57,7 @@ const simpleResume = async (req, res) => {
       fontSize: 12,
     });
     const headingLeft = 30;
-    const headingTop = 85;
+    const headingTop = 110;
     let height = headingTop;
     myPDF.font(fonts[1]);
     myPDF
@@ -135,15 +135,12 @@ const simpleResume = async (req, res) => {
     drawLine(myPDF, (height += projectSectionHeadingHeight), lineLeft);
 
     // First Project Title
+    myPDF.fontSize(11);
     const firstProjectTitle = `${getFirstProjectTitle} -`;
-    const firstProjectTitleWidth = myPDF.widthOfString(firstProjectTitle, {
-      fontSize: 11,
-    });
+    const firstProjectTitleWidth = myPDF.widthOfString(firstProjectTitle);
 
     const SecondProjectTitle = `${getSecondProjectTitle} -`;
-    const SecondProjectTitleWidth = myPDF.widthOfString(SecondProjectTitle, {
-      fontSize: 11,
-    });
+    const SecondProjectTitleWidth = myPDF.widthOfString(SecondProjectTitle);
     myPDF
       .font(fonts[1])
       .fillColor("black")
@@ -152,7 +149,7 @@ const simpleResume = async (req, res) => {
     myPDF
       .fontSize(10)
       .fillColor("blue")
-      .text("Link", firstProjectTitleWidth + 20, height, {
+      .text("Link", firstProjectTitleWidth + headingLeft + 5, height, {
         link: firstProjectURL,
         underline: true,
       });
@@ -180,7 +177,7 @@ const simpleResume = async (req, res) => {
     myPDF
       .fontSize(10)
       .fillColor("blue")
-      .text("Link", SecondProjectTitleWidth + 20, height, {
+      .text("Link", SecondProjectTitleWidth + headingLeft + 5, height, {
         link: secondProjectURL,
         underline: true,
       });
