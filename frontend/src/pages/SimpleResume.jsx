@@ -85,7 +85,7 @@ const SimpleResume = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const apiURL = "http://localhost:5000/api/simpleResume";
+      const apiURL = "https://ai-powered-resume-builder-5h60.onrender.com/api/simpleResume";
       const response = await axios.post(apiURL, formData, {
         headers: {
           'Content-Type': 'application/json',
