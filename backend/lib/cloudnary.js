@@ -1,26 +1,34 @@
-import cloudinary from 'cloudinary';
-import { configDotenv } from "dotenv";
-const { v2: cloudinaryV2 } = cloudinary;
+import { v2 as cloudinary } from "cloudinary";
+import dotenv from "dotenv";
 
-configDotenv();
+dotenv.config();
 
-cloudinaryV2.config({
+cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const uploadToCloudinary = async (filePath) => {
+const uploadToCloudinary = async (streamBuffer) => {
   try {
-    const result = await cloudinary.uploader.upload(filePath, {
-      folder: 'resumebuilder',
-      format: 'pdf',
-      resource_type: 'raw',
+    const result = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder: "resumebuilder",
+          format: "pdf",
+          resource_type: "raw",
+        },
+        (error, result) => {
+          if (error) return reject(error);
+          resolve(result);
+        }
+      );
+      streamBuffer.pipe(uploadStream);
     });
+
     return result.secure_url;
   } catch (error) {
-    console.error('Error uploading file to Cloudinary:', error);
-    throw error;
+    throw new Error(`Cloudinary upload failed: ${error.message}`);
   }
 };
 
