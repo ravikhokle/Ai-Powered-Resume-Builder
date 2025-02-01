@@ -31,8 +31,6 @@ const simpleResume = async (req, res) => {
       hobbiesAndInterestsArray,
     } = req.body;
 
-    console.log(req.body.name)
-
     const defaultOptions = {
       margins: { top: 0, left: 0, right: 0, bottom: 0 },
       layout: "portrait",
