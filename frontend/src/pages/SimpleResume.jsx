@@ -1,11 +1,15 @@
 import { useState } from "react";
 import axios from "axios";
 import placeHolder from "./placeHolder";
+import Loading from "../components/Loading";
 
 const SimpleResume = () => {
+
+  const [loading, setLoading] = useState(false);
+
   const [response, setResponse] = useState({
-    message: "",
-    resumeLink: "",
+    message:"",
+    resumeLink:"",
   });
 
   const [formData, setFormData] = useState({
@@ -85,12 +89,14 @@ const SimpleResume = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const apiURL = "https://ai-powered-resume-builder-5h60.onrender.com/api/simpleResume";
-      const response = await axios.post(apiURL, formData, {
+      setLoading(true);
+      const url = `${import.meta.env.VITE_API}/simpleResume`;
+      const response = await axios.post(url, formData, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
+      setLoading(false);
       setResponse({
         message: response.data.message,
         resumeLink: response.data.resumeLink,
@@ -480,12 +486,19 @@ const SimpleResume = () => {
           Submit
         </button>
       </form>
+
+      {loading &&
       <div className="p-6 space-y-2 bg-white shadow-lg rounded-xl max-w-4xl mx-auto mt-5">
-        {response.resumeLink && <h1>Congrats 🎉 your resume is ready 🤩</h1>}
-        {response.resumeLink && (
-          <a href={response.resumeLink}>👉 View & Download</a>
-        )}
-      </div>
+      <Loading show={loading}/>
+      </div>}
+
+      {response.resumeLink &&
+      <div className="p-6 space-y-2 bg-white shadow-lg rounded-xl max-w-4xl mx-auto mt-5">
+      <Loading show={loading}/>
+         <h1>🎉 Congratulations! Your resume is ready to shine 🤩</h1>
+          <a href={response.resumeLink} target="_blank">👉 <span className="text-blue-600">Download</span></a>
+         <p className="py-2">We'd love to hear your thoughts on our project! Share your valuable feedback with us at: ravikhokle1@gmail.com.</p>
+      </div>}
     </div>
   );
 };
