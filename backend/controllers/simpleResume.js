@@ -5,6 +5,8 @@ import contactSection from "../utils/contactSection.js";
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { v4 as uuidv4 } from 'uuid';
+import uploadToCloudinary from "../lib/cloudnary.js";
+import deleteLocalFile from "../lib/deleteLocalFile.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -287,11 +289,14 @@ const simpleResume = (req, res) => {
         myPDF.pipe(writeStream);
         myPDF.end();
         
-        writeStream.on("finish", () => {
-
+        writeStream.on("finish", async () => {
+          
+          const cloudinaryUrl = await uploadToCloudinary(filePath);
+          deleteLocalFile(filePath);
           const data = {
             message: "Your resume is ready",
-            resumeLink: filePath,
+            resumeLink: cloudinaryUrl,
+            success:true
           }
           
           res.send(data);

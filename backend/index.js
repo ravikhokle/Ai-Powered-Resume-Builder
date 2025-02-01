@@ -9,7 +9,7 @@ const app = express();
 const port = process.env.PORT || 8000;
 
 app.use(cors({
-  origin: 'https://ai-powered-resume-builder.ravikhokle.site',
+  origin: ['https://ai-powered-resume-builder.ravikhokle.site', 'http://localhost:5000'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Authorization', 'Content-Type'],
 }));
