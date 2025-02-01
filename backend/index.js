@@ -9,7 +9,7 @@ const app = express();
 const port = process.env.PORT || 8000;
 
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: 'https://ai-powered-resume-builder-5h60.onrender.com',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Authorization', 'Content-Type'],
 }));
@@ -17,8 +17,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api", resumeRoutes);
 
-app.post("/", (req, res) => {
-  res.send("Home Page Again.");
+app.send("/", (req, res) => {
+  res.send("Home Page");
 });
 
 app.listen(port, () => {
