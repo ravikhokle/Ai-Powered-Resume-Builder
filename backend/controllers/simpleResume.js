@@ -12,7 +12,7 @@ const __dirname = path.dirname(__filename);
 const simpleResume = (req, res) => {
     try {
 
-        const { summaryText, summryTitle, skillsTitle, Skills, projectSectionHeading, getFirstProjectTitle, firstProjectURL, firstProjectArray, getSirstProjectTitle, secondProjectURL, secondProjectArray, awardsAndAchievementsTitle, awardList, EducationSection, degreeName, universityName, Years, degreeStartDate, degreeEndDate, hobbiesAndInterests, hobbiesAndInterestsArray  } = req.body;
+        const { summaryText, summryTitle, skillsTitle, Skills, projectSectionHeading, getFirstProjectTitle, firstProjectURL, firstProjectArray, getSecondProjectTitle, secondProjectURL, secondProjectArray, awardsAndAchievementsTitle, awardList, EducationSection, degreeName, universityName, Years, degreeStartDate, degreeEndDate, hobbiesAndInterests, hobbiesAndInterestsArray  } = req.body;
     
         const defaultOptions = {
           margins: { top: 0, left: 0, right: 0, bottom: 0 },
@@ -118,7 +118,7 @@ const simpleResume = (req, res) => {
           fontSize: 11,
         });
       
-        const SecondProjectTitle = `${getSirstProjectTitle} -`;
+        const SecondProjectTitle = `${getSecondProjectTitle} -`;
         const SecondProjectTitleWidth = myPDF.widthOfString(SecondProjectTitle, {
           fontSize: 11,
         });
