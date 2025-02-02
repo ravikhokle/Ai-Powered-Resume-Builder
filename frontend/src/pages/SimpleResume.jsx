@@ -3,14 +3,15 @@ import axios from "axios";
 import placeHolder from "./placeHolder";
 import Loading from "../components/Loading";
 import DownloadButton from "../components/DownloadButton";
+import PDFLink from "./PDFViewer";
+import SubmitButton from "../components/SubmitButton";
 
 const SimpleResume = () => {
-
   const [loading, setLoading] = useState(false);
 
   const [response, setResponse] = useState({
-    message:"",
-    resumeLink:"",
+    message: "",
+    resumeLink: "",
   });
 
   const [formData, setFormData] = useState({
@@ -21,7 +22,7 @@ const SimpleResume = () => {
     LinkedInURL: "",
     summryTitle: "Professional Summary",
     summaryText: "",
-    skillsTitle: "Technical Skills",
+    skillsTitle: "Skills",
     Skills: [
       {
         field: "",
@@ -95,7 +96,7 @@ const SimpleResume = () => {
       const url = `${import.meta.env.VITE_API}/simpleResume`;
       const response = await axios.post(url, formData, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
       setLoading(false);
@@ -191,7 +192,7 @@ const SimpleResume = () => {
         {/* Summary Section */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Summary:
+          Professional Summary:
           </label>
           <textarea
             name="summaryText"
@@ -480,29 +481,42 @@ const SimpleResume = () => {
             </div>
           ))}
         </div>
-        <p className="text-sm">📝 Note: This is a resume template designed with fixed sizes and fields to ensure optimal formatting. To create the best version of your resume, <span className="text-red-600">please fill out all fields.</span></p>
-        <button
+        <p className="text-sm">
+          📝 Note: This is a resume template designed with fixed sizes and
+          fields to ensure optimal formatting. To create the best version of
+          your resume,{" "}
+          <span className=" font-bold">please fill out all fields.</span>
+        </p>
+        {/* <button
           type="submit"
           className="w-full py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         >
           Submit
-        </button>
+        </button> */}
+        <SubmitButton name="Generate"/>
       </form>
 
-      {loading &&
-      <div className="p-6 space-y-2 bg-white shadow-lg rounded-xl max-w-4xl mx-auto mt-5">
-      <Loading show={loading}/>
-       </div>}
+      {loading && (
+        <div className="p-6 space-y-2 bg-white shadow-lg rounded-xl max-w-4xl mx-auto mt-5">
+          <Loading show={loading} />
+        </div>
+      )}
 
-      {response.resumeLink &&
-      <div className="p-6 space-y-2 bg-white shadow-lg rounded-xl max-w-4xl mx-auto mt-5">
-         <h1>🎉 <b>Congratulations!</b> Your resume is ready to shine 🤩</h1>
-         <div className="flex">
-          <DownloadButton name="Download" url={response.resumeLink}/>
-         </div>
-         <p>We&apos;d love to hear your thoughts on our project! Share your valuable feedback with us at: ravikhokle1@gmail.com.</p>
-         <iframe src={response.resumeLink} className="w-[100%] h-[1150px]" />
-      </div>}
+      {response.resumeLink && (
+        <div className="p-6 space-y-2 bg-white shadow-lg rounded-xl max-w-4xl mx-auto mt-5">
+          <h3 className="py-2 py-2">
+            🎉 <b>Congratulations!</b> Your resume is ready to shine 🤩
+          </h3>
+          <PDFLink url={response.resumeLink} />
+          <div className="flex items-center justify-center">
+            <DownloadButton name="Download" url={response.resumeLink} />
+          </div>
+          <p>
+            We&apos;d love to hear your thoughts on our project! Share your
+            valuable feedback with us at: ravikhokle1@gmail.com.
+          </p>
+        </div>
+      )}
     </div>
   );
 };

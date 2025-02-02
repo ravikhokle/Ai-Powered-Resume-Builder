@@ -15,10 +15,10 @@ const placeHolder = {
       }
     ],
     projectSectionHeading: "Projects",
-    getFirstProjectTitle: "Developed a Web-Based Project Platform",
+    getFirstProjectTitle: "InternshipYatra",
     firstProjectURL: "https://internshipyatra.ravikhokle.site",
     firstProjectArray: [
-      "Hello, Ravi is working on pdf generate project Created a platform to connect students with Project opportunities."
+      "Created a platform to connect students with internship opportunities."
     ],
     getSecondProjectTitle: "Developed a Web-Based Project Platform",
     secondProjectURL: "https://internshipyatra.ravikhokle.site",
@@ -31,7 +31,7 @@ const placeHolder = {
     awardList: [
       {
         boldText: "Full Stack Web Development:",
-        normalText: "Compilation Certificates from Udemy",
+        normalText: "completion certificate from Udemy",
       }
     ],
     EducationSection: "Education",
