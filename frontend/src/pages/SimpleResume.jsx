@@ -504,7 +504,7 @@ const SimpleResume = () => {
 
       {response.resumeLink && (
         <div className="p-6 space-y-2 bg-white shadow-lg rounded-xl max-w-4xl mx-auto mt-5">
-          <h3 className="py-2 py-2">
+          <h3 className="py-2">
             🎉 <b>Congratulations!</b> Your resume is ready to shine 🤩
           </h3>
           <PDFLink url={response.resumeLink} />
