@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import placeHolder from "./placeHolder";
 import Loading from "../components/Loading";
+import DownloadButton from "../components/DownloadButton";
 
 const SimpleResume = () => {
 
@@ -495,9 +496,11 @@ const SimpleResume = () => {
 
       {response.resumeLink &&
       <div className="p-6 space-y-2 bg-white shadow-lg rounded-xl max-w-4xl mx-auto mt-5">
-         <h1>🎉 Congratulations! Your resume is ready to shine 🤩</h1>
-          <a href={response.resumeLink} target="_blank">👉 <span className="text-blue-600">Download</span></a>
-         <p className="py-2">We&apos;d love to hear your thoughts on our project! Share your valuable feedback with us at: ravikhokle1@gmail.com.</p>
+         <h1>🎉 <b>Congratulations!</b> Your resume is ready to shine 🤩</h1>
+         <div className="flex">
+          <DownloadButton name="Download" url={response.resumeLink}/>
+         </div>
+         <p>We&apos;d love to hear your thoughts on our project! Share your valuable feedback with us at: ravikhokle1@gmail.com.</p>
       </div>}
     </div>
   );
