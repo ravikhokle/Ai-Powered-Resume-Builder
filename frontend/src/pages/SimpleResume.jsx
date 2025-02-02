@@ -501,6 +501,7 @@ const SimpleResume = () => {
           <DownloadButton name="Download" url={response.resumeLink}/>
          </div>
          <p>We&apos;d love to hear your thoughts on our project! Share your valuable feedback with us at: ravikhokle1@gmail.com.</p>
+         <iframe src={response.resumeLink} className="w-[100%] h-[1150px]" />
       </div>}
     </div>
   );
