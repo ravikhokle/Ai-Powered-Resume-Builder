@@ -5,12 +5,11 @@ import Loading from "../components/Loading";
 import DownloadButton from "../components/DownloadButton";
 import PDFLink from "./PDFViewer";
 import SubmitButton from "../components/SubmitButton";
-import PlusButton from "../components/PlusButton";
-import TrashButton from "../components/TrashButton";
 
 const SimpleResume = () => {
   const [loading, setLoading] = useState(false);
-  const [responseData, setResponseData] = useState({
+
+  const [response, setResponse] = useState({
     message: "",
     resumeLink: "",
   });
@@ -24,24 +23,43 @@ const SimpleResume = () => {
     summryTitle: "Professional Summary",
     summaryText: "",
     skillsTitle: "Skills",
-    Skills: [{ field: "", skillsText: "" }],
+    Skills: [
+      {
+        field: "",
+        skillsText: "",
+      },
+      {
+        field: "",
+        skillsText: "",
+      },
+      { field: "", skillsText: "" },
+    ],
     projectSectionHeading: "Projects",
     getFirstProjectTitle: "",
     firstProjectURL: "",
-    firstProjectArray: [""],
+    firstProjectArray: ["", "", ""],
     getSecondProjectTitle: "",
     secondProjectURL: "",
-    secondProjectArray: [""],
+    secondProjectArray: ["", "", ""],
     awardsAndAchievementsTitle: "Awards & Achievements",
-    awardList: [{ boldText: "", normalText: "" }],
+    awardList: [
+      {
+        boldText: "",
+        normalText: "",
+      },
+      {
+        boldText: "",
+        normalText: "",
+      },
+    ],
     EducationSection: "Education",
     degreeName: "",
     universityName: "",
-    Years: [""],
+    Years: ["", "", ""],
     degreeStartDate: "",
     degreeEndDate: "",
     hobbiesAndInterests: "Hobbies & Interests",
-    hobbiesAndInterestsArray: [""],
+    hobbiesAndInterestsArray: ["", "", "", "", ""],
   });
 
   const handleChange = (e) => {
@@ -71,78 +89,6 @@ const SimpleResume = () => {
     });
   };
 
-  const addSkill = () => {
-    setFormData((prev) => ({
-      ...prev,
-      Skills: [...prev.Skills, { field: "", skillsText: "" }],
-    }));
-  };
-
-  const removeSkill = (index) => {
-    setFormData((prev) => ({
-      ...prev,
-      Skills: prev.Skills.filter((_, i) => i !== index),
-    }));
-  };
-
-  const addProjectPoint = (field) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: [...prev[field], ""],
-    }));
-  };
-
-  const removeProjectPoint = (field, index) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: prev[field].filter((_, i) => i !== index),
-    }));
-  };
-
-  const addAward = () => {
-    setFormData((prev) => ({
-      ...prev,
-      awardList: [...prev.awardList, { boldText: "", normalText: "" }],
-    }));
-  };
-
-  const removeAward = (index) => {
-    setFormData((prev) => ({
-      ...prev,
-      awardList: prev.awardList.filter((_, i) => i !== index),
-    }));
-  };
-
-  const addHobby = () => {
-    setFormData((prev) => ({
-      ...prev,
-      hobbiesAndInterestsArray: [...prev.hobbiesAndInterestsArray, ""],
-    }));
-  };
-
-  const removeHobby = (index) => {
-    setFormData((prev) => ({
-      ...prev,
-      hobbiesAndInterestsArray: prev.hobbiesAndInterestsArray.filter(
-        (_, i) => i !== index
-      ),
-    }));
-  };
-
-  const addYear = () => {
-    setFormData((prev) => ({
-      ...prev,
-      Years: [...prev.Years, ""],
-    }));
-  };
-
-  const removeYear = (index) => {
-    setFormData((prev) => ({
-      ...prev,
-      Years: prev.Years.filter((_, i) => i !== index),
-    }));
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -153,27 +99,14 @@ const SimpleResume = () => {
           "Content-Type": "application/json",
         },
       });
-
-      const successMessage = response.data.message;
-      setResponseData({
-        message: successMessage,
+      setLoading(false);
+      setResponse({
+        message: response.data.message,
         resumeLink: response.data.resumeLink,
       });
-      alert(successMessage);
+      console.log(response.data.resumeLink);
     } catch (error) {
-      let errorMessage = "An unexpected error occurred. Please try again.";
-      if (error.response) {
-        errorMessage = error.response.data.message || "Something went wrong.";
-      } else if (error.request) {
-        errorMessage = "Server is down. Please try again later.";
-      }
-      setResponseData({
-        message: errorMessage,
-        resumeLink: null,
-      });
-      alert(errorMessage);
-    } finally {
-      setLoading(false);
+      console.error("Error while creating resume:", error);
     }
   };
 
@@ -259,7 +192,7 @@ const SimpleResume = () => {
         {/* Summary Section */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Professional Summary:
+          Professional Summary:
           </label>
           <textarea
             name="summaryText"
@@ -267,7 +200,7 @@ const SimpleResume = () => {
             onChange={handleChange}
             placeholder={placeHolder.summaryText}
             className="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            rows="5"
+            rows="4"
           />
         </div>
 
@@ -307,12 +240,8 @@ const SimpleResume = () => {
                   className="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
-              <button type="button" onClick={() => removeSkill(index)}>
-                <TrashButton />
-              </button>
             </div>
           ))}
-          <PlusButton funName={addSkill} displayName="Add Skill" />
         </div>
 
         {/* Projects Section */}
@@ -348,34 +277,21 @@ const SimpleResume = () => {
             </div>
           </div>
           {formData.firstProjectArray.map((item, index) => (
-            <div key={index} className="space-y-2 mt-4 mb-4">
+            <div key={index} className="space-y-2 mt-4">
               <label className="block text-sm font-medium text-gray-700">
                 Point {index + 1}:
               </label>
-              <div className=" sm:flex flex-row justify-between">
-                <input
-                  type="text"
-                  value={item}
-                  onChange={(e) =>
-                    handleArrayChange(e, "firstProjectArray", index)
-                  }
-                  placeholder={placeHolder.firstProjectArray[index] || ""}
-                  className="w-full sm:w-[96%] p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <button
-                  type="button"
-                  onClick={() => removeProjectPoint("firstProjectArray", index)}
-                  className="mt-4 sm:mt-0"
-                >
-                  <TrashButton />
-                </button>
-              </div>
+              <input
+                type="text"
+                value={item}
+                onChange={(e) =>
+                  handleArrayChange(e, "firstProjectArray", index)
+                }
+                placeholder={placeHolder.firstProjectArray[index] || ""}
+                className="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
             </div>
           ))}
-          <PlusButton
-            funName={() => addProjectPoint("firstProjectArray")}
-            displayName="Add Point"
-          />
 
           {/* Second Project */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 mt-6">
@@ -405,35 +321,20 @@ const SimpleResume = () => {
             </div>
           </div>
           {formData.secondProjectArray.map((item, index) => (
-            <div key={index} className="space-y-2 mt-4 mb-4">
+            <div key={index} className="space-y-2 mt-4">
               <label className="block text-sm font-medium text-gray-700">
                 Point {index + 1}:
               </label>
-              <div className=" sm:flex flex-row justify-between">
-                <input
-                  type="text"
-                  value={item}
-                  onChange={(e) =>
-                    handleArrayChange(e, "secondProjectArray", index)
-                  }
-                  className="w-full sm:w-[96%] p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <button
-                  type="button"
-                  onClick={() =>
-                    removeProjectPoint("secondProjectArray", index)
-                  }
-                  className="mt-4 sm:mt-0"
-                >
-                  <TrashButton />
-                </button>
-              </div>
+              <input
+                type="text"
+                value={item}
+                onChange={(e) =>
+                  handleArrayChange(e, "secondProjectArray", index)
+                }
+                className="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
             </div>
           ))}
-          <PlusButton
-            funName={() => addProjectPoint("secondProjectArray")}
-            displayName="Add Point"
-          />
         </div>
 
         {/* Awards Section */}
@@ -448,7 +349,7 @@ const SimpleResume = () => {
             >
               <div className="w-full sm:w-1/3">
                 <label className="block text-sm font-medium text-gray-700">
-                  Award Name
+                  Name
                 </label>
                 <input
                   type="text"
@@ -462,7 +363,7 @@ const SimpleResume = () => {
               </div>
               <div className="w-full sm:w-2/3">
                 <label className="block text-sm font-medium text-gray-700">
-                  Details
+                  Description
                 </label>
                 <input
                   type="text"
@@ -474,12 +375,8 @@ const SimpleResume = () => {
                   className="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
-              <button type="button" onClick={() => removeAward(index)}>
-                <TrashButton />
-              </button>
             </div>
           ))}
-          <PlusButton funName={addAward} displayName="Add Award" />
         </div>
 
         {/* Education Section */}
@@ -543,33 +440,22 @@ const SimpleResume = () => {
               />
             </div>
           </div>
-
-          <div>
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">Years</h3>
+          {/* Years Section */}
+          <div className="mt-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Years:
+            </label>
             {formData.Years.map((year, index) => (
-              <div key={index} className="space-y-2 mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                  {index + 1}:
-                </label>
-                <div className=" sm:flex flex-row justify-between">
-                  <input
-                    type="text"
-                    value={year}
-                    onChange={(e) => handleArrayChange(e, "Years", index)}
-                    placeholder={placeHolder.Years[index] || ""}
-                    className="w-full sm:w-[96%]  p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeYear(index)}
-                    className="mt-4 sm:mt-0"
-                  >
-                    <TrashButton />
-                  </button>
-                </div>
+              <div key={index} className="space-y-2">
+                <input
+                  type="text"
+                  value={year}
+                  onChange={(e) => handleArrayChange(e, "Years", index)}
+                  placeholder={placeHolder.Years[index] || ""}
+                  className="block w-full p-2 mb-5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
               </div>
             ))}
-            <PlusButton funName={addYear} displayName="Add Year" />
           </div>
         </div>
 
@@ -579,44 +465,35 @@ const SimpleResume = () => {
             Hobbies & Interests
           </h3>
           {formData.hobbiesAndInterestsArray.map((hobby, index) => (
-            <div key={index} className="space-y-2 mb-4">
+            <div key={index} className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">
                 {index + 1}:
               </label>
-              <div className=" sm:flex flex-row justify-between">
-                <input
-                  type="text"
-                  value={hobby}
-                  onChange={(e) =>
-                    handleArrayChange(e, "hobbiesAndInterestsArray", index)
-                  }
-                  placeholder={
-                    placeHolder.hobbiesAndInterestsArray[index] || ""
-                  }
-                  className="w-full sm:w-[96%] p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <button
-                  type="button"
-                  onClick={() => removeHobby(index)}
-                  className="mt-4 sm:mt-0"
-                >
-                  <TrashButton />
-                </button>
-              </div>
+              <input
+                type="text"
+                value={hobby}
+                onChange={(e) =>
+                  handleArrayChange(e, "hobbiesAndInterestsArray", index)
+                }
+                placeholder={placeHolder.hobbiesAndInterestsArray[index] || ""}
+                className="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
             </div>
           ))}
-          <PlusButton funName={addHobby} displayName="Add Hobby" />
         </div>
-
         <p className="text-sm">
           📝 Note: This is a resume template designed with fixed sizes and
           fields to ensure optimal formatting. To create the best version of
           your resume,{" "}
-          <span className=" font-bold text-red-500">
-            please fill out all fields.
-          </span>
+          <span className=" font-bold">please fill out all fields.</span>
         </p>
-        <SubmitButton name="Generate" />
+        {/* <button
+          type="submit"
+          className="w-full py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          Submit
+        </button> */}
+        <SubmitButton name="Generate"/>
       </form>
 
       {loading && (
@@ -625,14 +502,14 @@ const SimpleResume = () => {
         </div>
       )}
 
-      {responseData.resumeLink && (
+      {response.resumeLink && (
         <div className="p-6 space-y-2 bg-white shadow-lg rounded-xl max-w-4xl mx-auto mt-5">
           <h3 className="py-2">
             🎉 <b>Congratulations!</b> Your resume is ready to shine 🤩
           </h3>
-          <PDFLink url={responseData.resumeLink} />
+          <PDFLink url={response.resumeLink} />
           <div className="flex items-center justify-center">
-            <DownloadButton name="Download" url={responseData.resumeLink} />
+            <DownloadButton name="Download" url={response.resumeLink} />
           </div>
           <p>
             We&apos;d love to hear your thoughts on our project! Share your
