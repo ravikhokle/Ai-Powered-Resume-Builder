@@ -3,7 +3,7 @@ import axios from "axios";
 import placeHolder from "./placeHolder";
 import Loading from "../components/Loading";
 import DownloadButton from "../components/DownloadButton";
-import PDFLink from "./PDFViewer";
+import PDFViewer from "../utils/PDFViewer";
 import SubmitButton from "../components/SubmitButton";
 import PlusButton from "../components/PlusButton";
 import TrashButton from "../components/TrashButton";
@@ -630,7 +630,7 @@ const SimpleResume = () => {
           <h3 className="py-2">
             🎉 <b>Congratulations!</b> Your resume is ready to shine 🤩
           </h3>
-          <PDFLink url={responseData.resumeLink} />
+          <PDFViewer url={responseData.resumeLink} />
           <div className="flex items-center justify-center">
             <DownloadButton name="Download" url={responseData.resumeLink} />
           </div>
