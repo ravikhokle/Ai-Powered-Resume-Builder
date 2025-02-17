@@ -20,9 +20,6 @@ const Toastify = (type , msg) => {
     case "warning":
       toast.warn(msg, options);
       break;
-    case "default":
-      toast(msg, options);
-      break;
     default:
       console.error("Invalid toast type:", type);
   }
