@@ -7,6 +7,8 @@ import PDFViewer from "../utils/PDFViewer";
 import SubmitButton from "../components/SubmitButton";
 import PlusButton from "../components/PlusButton";
 import TrashButton from "../components/TrashButton";
+import { ToastContainer } from "react-toastify";
+import Toastify from "../utils/Toastify";
 
 const SimpleResume = () => {
   const [loading, setLoading] = useState(false);
@@ -159,7 +161,7 @@ const SimpleResume = () => {
         message: successMessage,
         resumeLink: response.data.resumeLink,
       });
-      // alert(successMessage);
+      Toastify("success", successMessage);
     } catch (error) {
       let errorMessage = "An unexpected error occurred. Please try again.";
       if (error.response) {
@@ -171,7 +173,7 @@ const SimpleResume = () => {
         message: errorMessage,
         resumeLink: null,
       });
-      // alert(errorMessage);
+      Toastify("error", errorMessage);
     } finally {
       setLoading(false);
     }
@@ -640,6 +642,7 @@ const SimpleResume = () => {
           </p>
         </div>
       )}
+      <ToastContainer />
     </div>
   );
 };
