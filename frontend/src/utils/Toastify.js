@@ -9,7 +9,7 @@ const Toastify = (type , msg) => {
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
-    theme: "colored"
+    theme: "dark"
   };
 
   switch (type) {
