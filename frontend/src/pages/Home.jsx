@@ -19,7 +19,7 @@ const Home = () => {
         </span>
       </h1>
 
-      {/* Templates Section */}
+      {/* Templates */}
       <div className="mt-20">
         <h2
           id="templates"
@@ -30,14 +30,18 @@ const Home = () => {
         <div className="text-center">
           <div>
             <h2 className="text-2xl font-bold my-2 py-2">Simple</h2>
-           <div><PDFViewer url={SimpleResume} /></div>
+            <div>
+              <PDFViewer url={SimpleResume} />
+            </div>
             <NormalButton url="/simple-resume" name="Create" />
           </div>
-          <hr className="my-5"/>
+          <hr className="my-5" />
           <div>
             <h2 className="text-2xl font-bold my-2 py-2">Exprienced</h2>
-           <div><PDFViewer url={SimpleResume} /></div>
-           <NormalButton url="/" name="Coming Soon..." />
+            <div>
+              <PDFViewer url={SimpleResume} />
+            </div>
+            <NormalButton url="/" name="Coming Soon..." />
           </div>
         </div>
       </div>

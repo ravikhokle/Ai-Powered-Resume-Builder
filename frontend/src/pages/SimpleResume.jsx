@@ -159,7 +159,7 @@ const SimpleResume = () => {
         message: successMessage,
         resumeLink: response.data.resumeLink,
       });
-      alert(successMessage);
+      // alert(successMessage);
     } catch (error) {
       let errorMessage = "An unexpected error occurred. Please try again.";
       if (error.response) {
@@ -171,7 +171,7 @@ const SimpleResume = () => {
         message: errorMessage,
         resumeLink: null,
       });
-      alert(errorMessage);
+      // alert(errorMessage);
     } finally {
       setLoading(false);
     }
