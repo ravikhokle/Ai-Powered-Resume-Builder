@@ -1,9 +1,11 @@
 import express from "express";
 import { configDotenv } from "dotenv";
-import resumeRoutes from "./routes/resumeRoutes.js"
+import allRoutes from "./routes/allRoutes.js"
 import cors from "cors";
+import DBConnect from "./db.js";
 
 configDotenv();
+DBConnect();
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -16,7 +18,7 @@ app.use(cors({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/api", resumeRoutes);
+app.use("/api", allRoutes);
 
 app.get("/", (req, res) => {
   res.send("Home Page");
