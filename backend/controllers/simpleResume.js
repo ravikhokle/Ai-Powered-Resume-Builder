@@ -87,7 +87,6 @@ const simpleResume = async (req, res) => {
     summaryText && summryTitle && addSection(summryTitle, summaryText);
 
     // Add skills section
-    if (skillsTitle && Skills && Skills.length > 0) {
       addSection(skillsTitle, "");
       Skills.forEach((skill) => {
         const fieldWidth = myPDF.widthOfString(skill.field, { fontSize: 11 });
@@ -104,7 +103,7 @@ const simpleResume = async (req, res) => {
           .text(skill.skillsText, fieldWidth + 45, height);
         height += currentElementHeight + 5;
       });
-    }
+    
 
     height += 10;
     // Add projects section
@@ -148,7 +147,6 @@ const simpleResume = async (req, res) => {
     }
 
     // Add awards section
-    if (awardsAndAchievementsTitle && awardList && awardList.length > 0) {
       addSection(awardsAndAchievementsTitle, "");
       awardList.forEach((award) => {
         const boldTextWidth = myPDF.widthOfString(award.boldText, {
@@ -169,7 +167,6 @@ const simpleResume = async (req, res) => {
           .text(award.normalText, boldTextWidth + 45, height);
         height += currentElementHeight + 5;
       });
-    }
 
     height += 10;
     // Add education section
@@ -209,11 +206,7 @@ const simpleResume = async (req, res) => {
     }
 
     // Add hobbies section
-    if (
-      hobbiesAndInterests &&
-      hobbiesAndInterestsArray &&
-      hobbiesAndInterestsArray.length > 0
-    ) {
+
       addSection(hobbiesAndInterests, "");
       hobbiesAndInterestsArray.forEach((hobby) => {
         const hobbyTextHeight = myPDF.heightOfString(hobby, { fontSize: 10 });
@@ -224,7 +217,6 @@ const simpleResume = async (req, res) => {
           .text(hobby, 50, height);
         height += hobbyTextHeight + 3;
       });
-    }
 
     myPDF.end();
 
