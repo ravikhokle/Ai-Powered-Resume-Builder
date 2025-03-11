@@ -9,6 +9,7 @@ import PlusButton from "../components/PlusButton";
 import TrashButton from "../components/TrashButton";
 import { ToastContainer } from "react-toastify";
 import Toastify from "../utils/Toastify";
+import AiBox from "../components/AiBox";
 
 const SimpleResume = () => {
   const [loading, setLoading] = useState(false);
@@ -643,6 +644,7 @@ const SimpleResume = () => {
         </div>
       )}
       <ToastContainer />
+      <AiBox />
     </div>
   );
 };

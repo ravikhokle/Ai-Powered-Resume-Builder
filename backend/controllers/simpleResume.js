@@ -4,8 +4,12 @@ import contactSection from "../utils/contactSection.js";
 import uploadToCloudinary from "../lib/cloudnary.js";
 import stream from "stream";
 
-
 const simpleResume = async (req, res) => {
+  const { name, resumeEmail, resumeNumber } = req.body;
+  if (!name && !resumeEmail && !resumeNumber) {
+    return res.status(400).send({ message: "Please provide contact details" });
+  }
+
   try {
     const {
       summaryText,
@@ -38,7 +42,7 @@ const simpleResume = async (req, res) => {
 
     const bufferStream = new stream.PassThrough();
 
-    // Default options
+    // Create PDF document
     const myPDF = new PDFDocument({
       layout: defaultOptions.layout,
       margins: defaultOptions.margins,
@@ -49,256 +53,178 @@ const simpleResume = async (req, res) => {
     const fonts = ["./fonts/calibri-regular.ttf", "./fonts/calibri-bold.ttf"];
     myPDF.font(fonts[0]);
 
-    // contact section
+    // Add contact section
     contactSection(myPDF, req.body);
 
-    //Summry heading
-    const summryTitleHeight = myPDF.heightOfString(summryTitle, {
-      fontSize: 12,
-    });
-    const headingLeft = 30;
-    const headingTop = 110;
-    let height = headingTop;
-    myPDF.font(fonts[1]);
-    myPDF
-      .fillColor("black")
-      .fontSize(12)
-      .text(summryTitle, headingLeft, height);
-
-    // Draw a line
-    const lineLeft = 30;
-    drawLine(myPDF, (height += summryTitleHeight), lineLeft);
-
-    // summary text
-    const width = myPDF.page.width - 54;
-    const summaryTextHeight = myPDF.heightOfString(summaryText, {
-      fontSize: 11,
-    });
-    myPDF.font(fonts[0]);
-    myPDF
-      .fillColor("black")
-      .fontSize(11)
-      .text(summaryText, headingLeft, (height += 8), { width });
-    // end of summary
-
-    // Technical Skills heading
-    const skillsTitleHeight = myPDF.heightOfString(skillsTitle, {
-      fontSize: 12,
-    });
-    myPDF.font(fonts[1]);
-    myPDF
-      .fillColor("black")
-      .fontSize(12)
-      .text(skillsTitle, headingLeft, (height += summaryTextHeight + 5));
-
-    drawLine(myPDF, (height += skillsTitleHeight), lineLeft);
-
-    // skills
-    Skills.forEach((skill) => {
-      // Calculate the heights
-      const fieldWidth = myPDF.widthOfString(skill.field, { fontSize: 11 });
-      const fieldHeight = myPDF.heightOfString(skill.field, { fontSize: 11 });
-      const skillsTextHeight = myPDF.heightOfString(skill.skillsText, {
-        fontSize: 11,
-      });
-
-      const currentElementHeight = Math.max(fieldHeight, skillsTextHeight);
-
-      // show fields
+    // Add section with title and content
+    const addSection = (
+      title,
+      content,
+      fontSize = 12,
+      contentFontSize = 11
+    ) => {
+      const titleHeight = myPDF.heightOfString(title, { fontSize });
       myPDF
         .font(fonts[1])
-        .fontSize(11)
-        .text(skill.field, headingLeft + 10, height + skillsTitleHeight);
-
-      // show skillsText
+        .fillColor("black")
+        .fontSize(fontSize)
+        .text(title, 30, height);
+      drawLine(myPDF, (height += titleHeight), 30);
+      const contentHeight = myPDF.heightOfString(content, {
+        fontSize: contentFontSize,
+      });
       myPDF
         .font(fonts[0])
         .fillColor("black")
-        .fontSize(11)
-        .text(skill.skillsText, fieldWidth + 45, height + skillsTitleHeight);
+        .fontSize(contentFontSize)
+        .text(content, 30, (height += 8), { width: myPDF.page.width - 54 });
+      height += contentHeight + 5;
+    };
 
-      height += currentElementHeight + 5;
-    });
-    // end of skills
+    let height = 110;
 
-    // Projects Section Start
-    const projectSectionHeadingHeight = myPDF.heightOfString(
-      projectSectionHeading,
-      { fontSize: 12 }
-    );
-    myPDF.font(fonts[1]);
-    myPDF
-      .fillColor("black")
-      .fontSize(12)
-      .text(projectSectionHeading, headingLeft, (height += 20));
+    // Add summary section
+    summaryText && summryTitle && addSection(summryTitle, summaryText);
 
-    drawLine(myPDF, (height += projectSectionHeadingHeight), lineLeft);
-
-    // First Project Title
-    myPDF.fontSize(11);
-    const firstProjectTitle = `${getFirstProjectTitle} -`;
-    const firstProjectTitleWidth = myPDF.widthOfString(firstProjectTitle);
-
-    const SecondProjectTitle = `${getSecondProjectTitle} -`;
-    const SecondProjectTitleWidth = myPDF.widthOfString(SecondProjectTitle);
-    myPDF
-      .font(fonts[1])
-      .fillColor("black")
-      .fontSize(11)
-      .text(firstProjectTitle, headingLeft, (height += 11));
-    myPDF
-      .fontSize(10)
-      .fillColor("blue")
-      .text("Link", firstProjectTitleWidth + headingLeft + 5, height, {
-        link: firstProjectURL,
-        underline: true,
+    // Add skills section
+    if (skillsTitle && Skills && Skills.length > 0) {
+      addSection(skillsTitle, "");
+      Skills.forEach((skill) => {
+        const fieldWidth = myPDF.widthOfString(skill.field, { fontSize: 11 });
+        const fieldHeight = myPDF.heightOfString(skill.field, { fontSize: 11 });
+        const skillsTextHeight = myPDF.heightOfString(skill.skillsText, {
+          fontSize: 11,
+        });
+        const currentElementHeight = Math.max(fieldHeight, skillsTextHeight);
+        myPDF.font(fonts[1]).fontSize(11).text(skill.field, 40, height);
+        myPDF
+          .font(fonts[0])
+          .fillColor("black")
+          .fontSize(11)
+          .text(skill.skillsText, fieldWidth + 45, height);
+        height += currentElementHeight + 5;
       });
+    }
 
-    const firstProjectArrayHeight = myPDF.heightOfString(firstProjectArray, {
-      fontSize: 11,
-    });
-    myPDF
-      .text(" ", headingLeft + 20, (height += 10), { width })
-      .fillColor("black")
-      .font(fonts[0])
-      .fontSize(11)
-      .list(firstProjectArray, { bulletRadius: 2.5 });
+    height += 10;
+    // Add projects section
+    if (
+      projectSectionHeading &&
+      (getFirstProjectTitle || getSecondProjectTitle)
+    ) {
+      addSection(projectSectionHeading, "");
+      const addProject = (title, url, points) => {
+        const projectTitle = url ? `${title} - ` : title;
+        const projectTitleWidth = myPDF.widthOfString(projectTitle);
+        myPDF
+          .font(fonts[1])
+          .fillColor("black")
+          .fontSize(11)
+          .text(projectTitle, 30, height);
+        url &&
+          myPDF
+            .fontSize(10)
+            .fillColor("blue")
+            .text("Link", projectTitleWidth + 35, height, {
+              link: url,
+              underline: true,
+            });
+        const pointsHeight = myPDF.heightOfString(points, { fontSize: 11 });
+        myPDF
+          .text(" ", 50, (height += 10), { width: myPDF.page.width - 54 })
+          .fillColor("black")
+          .font(fonts[0])
+          .fontSize(11)
+          .list(points, { bulletRadius: 2.5 });
+        height += pointsHeight + 20;
+      };
 
-    // second Project Title
-    myPDF
-      .font(fonts[1])
-      .fillColor("black")
-      .fontSize(11)
-      .text(
-        SecondProjectTitle,
-        headingLeft,
-        (height += firstProjectArrayHeight + 20)
-      );
-    myPDF
-      .fontSize(10)
-      .fillColor("blue")
-      .text("Link", SecondProjectTitleWidth + headingLeft + 5, height, {
-        link: secondProjectURL,
-        underline: true,
+      getFirstProjectTitle &&
+        addProject(getFirstProjectTitle, firstProjectURL, firstProjectArray);
+      getSecondProjectTitle ? (height += 30) : height + 0; // Add space between first and second project
+      getSecondProjectTitle &&
+        addProject(getSecondProjectTitle, secondProjectURL, secondProjectArray);
+      height += 20; // Add space after second project
+    }
+
+    // Add awards section
+    if (awardsAndAchievementsTitle && awardList && awardList.length > 0) {
+      addSection(awardsAndAchievementsTitle, "");
+      awardList.forEach((award) => {
+        const boldTextWidth = myPDF.widthOfString(award.boldText, {
+          fontSize: 11,
+        });
+        const boldTextHeight = myPDF.heightOfString(award.boldText, {
+          fontSize: 11,
+        });
+        const normalTextHeight = myPDF.heightOfString(award.normalText, {
+          fontSize: 11,
+        });
+        const currentElementHeight = Math.max(boldTextHeight, normalTextHeight);
+        myPDF.font(fonts[1]).fontSize(11).text(award.boldText, 40, height);
+        myPDF
+          .font(fonts[0])
+          .fillColor("black")
+          .fontSize(11)
+          .text(award.normalText, boldTextWidth + 45, height);
+        height += currentElementHeight + 5;
       });
+    }
 
-    const secondProjectArrayHeight = myPDF.heightOfString(secondProjectArray, {
-      fontSize: 11,
-    });
-    myPDF
-      .text(" ", headingLeft + 20, (height += 10), { width })
-      .fillColor("black")
-      .font(fonts[0])
-      .fontSize(11)
-      .list(secondProjectArray, { bulletRadius: 2.5 });
-
-    //Awards & Achievements Section Start
-    myPDF.font(fonts[1]);
-    myPDF
-      .fillColor("black")
-      .fontSize(12)
-      .text(
-        awardsAndAchievementsTitle,
-        headingLeft,
-        (height += secondProjectArrayHeight + 30)
-      );
-    drawLine(myPDF, (height += 13), lineLeft);
-
-    awardList.forEach((award) => {
-      // Calculate the heights
-      const boldTextWidth = myPDF.widthOfString(award.boldText, {
+    height += 10;
+    // Add education section
+    if (degreeName.length > 0) {
+      addSection(EducationSection, "");
+      const universityNameWidth = myPDF.widthOfString(universityName, {
         fontSize: 11,
       });
-      const boldTextHeight = myPDF.heightOfString(award.boldText, {
-        fontSize: 11,
-      });
-      const normalTextHeight = myPDF.heightOfString(award.normalText, {
-        fontSize: 11,
-      });
-
-      const currentElementHeight = Math.max(boldTextHeight, normalTextHeight);
-
+      const widthForShowUniversityName =
+        myPDF.page.width - universityNameWidth - 30;
       myPDF
         .font(fonts[1])
-        .fontSize(11)
-        .text(award.boldText, headingLeft + 10, height + normalTextHeight);
-
-      myPDF
-        .font(fonts[0])
         .fillColor("black")
         .fontSize(11)
-        .text(award.normalText, boldTextWidth + 45, height + normalTextHeight);
+        .text(degreeName, 50, height);
+      universityName &&
+        myPDF
+          .font(fonts[1])
+          .fillColor("black")
+          .fontSize(11)
+          .text(universityName, widthForShowUniversityName, height);
+      degreeStartDate &&
+        myPDF
+          .font(fonts[0])
+          .fillColor("black")
+          .fontSize(11)
+          .text(`${degreeStartDate} - ${degreeEndDate}`, 50, (height += 20));
+      height += 1; // Add space between degree dates and years list
+      Years &&
+        myPDF
+          .text(" ", 50, (height += 8))
+          .font(fonts[0])
+          .fillColor("black")
+          .fontSize(11)
+          .list(Years, { bulletRadius: 2.5 });
+      height += 60; // Add space after years list
+    }
 
-      height += currentElementHeight + 5;
-    });
-
-    myPDF.font(fonts[1]);
-    myPDF
-      .fillColor("black")
-      .fontSize(12)
-      .text(EducationSection, headingLeft, (height += 20));
-    drawLine(myPDF, (height += 13), lineLeft);
-    const universityNameWidth = myPDF.widthOfString(universityName, {
-      fontSize: 11,
-    });
-
-    const widthForShowUniversityName =
-      myPDF.page.width - universityNameWidth - headingLeft;
-
-    myPDF
-      .font(fonts[1])
-      .fillColor("black")
-      .fontSize(11)
-      .text(degreeName, headingLeft + 20, (height += 10), { width });
-
-    myPDF
-      .font(fonts[1])
-      .fillColor("black")
-      .fontSize(11)
-      .text(universityName, widthForShowUniversityName, height, { width });
-
-    myPDF
-      .font(fonts[0])
-      .fillColor("black")
-      .fontSize(11)
-      .text(
-        `${degreeStartDate} - ${degreeEndDate}`,
-        headingLeft + 20,
-        (height += 20),
-        { width }
-      );
-
-    myPDF
-      .text(" ", headingLeft + 20, (height += 8), { width })
-      .font(fonts[0])
-      .fillColor("black")
-      .fontSize(11)
-      .list(Years, { bulletRadius: 2.5 });
-
-    const yearHeight = myPDF.heightOfString(Years, { fontSize: 11 });
-
-    // Hobbies and Interests
-    myPDF
-      .font(fonts[1])
-      .fillColor("black")
-      .fontSize(11)
-      .text(hobbiesAndInterests, headingLeft, (height += yearHeight + 55), {
-        width,
+    // Add hobbies section
+    if (
+      hobbiesAndInterests &&
+      hobbiesAndInterestsArray &&
+      hobbiesAndInterestsArray.length > 0
+    ) {
+      addSection(hobbiesAndInterests, "");
+      hobbiesAndInterestsArray.forEach((hobby) => {
+        const hobbyTextHeight = myPDF.heightOfString(hobby, { fontSize: 10 });
+        myPDF
+          .font(fonts[0])
+          .fillColor("black")
+          .fontSize(11)
+          .text(hobby, 50, height);
+        height += hobbyTextHeight + 3;
       });
-
-    drawLine(myPDF, (height += 12), lineLeft);
-
-    hobbiesAndInterestsArray.forEach((hobby) => {
-      const hobbyTextHeight = myPDF.heightOfString(hobby, { fontSize: 10 });
-
-      myPDF
-        .font(fonts[0])
-        .fillColor("black")
-        .fontSize(11)
-        .text(hobby, headingLeft + 20, height + 10, { width });
-
-      height += hobbyTextHeight + 5; // Increment the current height for the next item
-    });
+    }
 
     myPDF.end();
 
@@ -312,7 +238,8 @@ const simpleResume = async (req, res) => {
 
     res.send(data);
   } catch (error) {
-    console.log(error);
+    console.error("Error generating resume:", error);
+    res.status(500).send({ message: "error while generating the resume." });
   }
 };
 

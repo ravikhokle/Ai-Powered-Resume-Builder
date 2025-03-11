@@ -1,0 +1,14 @@
+{
+    "name": "ai-powered-resume-builder",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+      "start": "concurrently \"cd frontend && npm run dev\" \"cd backend && nodemon index.js\"",
+      "dev": "cd frontend vite",
+      "build": "vite build",
+      "lint": "eslint .",
+      "preview": "vite preview"
+    }
+  }
+  
