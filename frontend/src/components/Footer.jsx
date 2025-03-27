@@ -61,12 +61,6 @@ const Footer = () => {
           >
             Contact
           </Link>
-          <Link
-            to="/privacy"
-            className="text-gray-600 hover:text-blue-600 text-sm"
-          >
-            Privacy Policy
-          </Link>
         </div>
       </div>
       <div className="text-center py-4 border-t border-gray-200">
