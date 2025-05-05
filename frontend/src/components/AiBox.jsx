@@ -14,7 +14,6 @@ const AiBox = () => {
   const textareaRef = useRef(null);
   const boxRef = useRef(null);
 
-  // Auto-resize textarea based on content
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
@@ -22,7 +21,6 @@ const AiBox = () => {
     }
   }, [response]);
 
-  // Close when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (boxRef.current && !boxRef.current.contains(event.target)) {

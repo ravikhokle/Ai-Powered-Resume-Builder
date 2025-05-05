@@ -53,10 +53,10 @@
       const fonts = ["./fonts/calibri-regular.ttf", "./fonts/calibri-bold.ttf"];
       myPDF.font(fonts[0]);
 
-      // Add contact section
+      // contact section
       contactSection(myPDF, req.body);
 
-      // Add section with title and content
+      // title and content
       const addSection = (
         title,
         content,
@@ -83,10 +83,10 @@
 
       let height = 110;
 
-      // Add summary section
+      // summary section
       summaryText && summryTitle && addSection(summryTitle, summaryText);
 
-      // Add skills section
+      // skills section
         addSection(skillsTitle, "");
         Skills.forEach((skill) => {
           const fieldWidth = myPDF.widthOfString(skill.field, { fontSize: 11 });
@@ -106,7 +106,7 @@
       
 
       height += 10;
-      // Add projects section
+      // projects section
       if (
         projectSectionHeading &&
         (getFirstProjectTitle || getSecondProjectTitle)
@@ -146,7 +146,7 @@
         height += 20; // Add space after second project
       }
 
-      // Add awards section
+      // awards section
         addSection(awardsAndAchievementsTitle, "");
         awardList.forEach((award) => {
           const boldTextWidth = myPDF.widthOfString(award.boldText, {
@@ -194,7 +194,7 @@
             .fillColor("black")
             .fontSize(11)
             .text(`${degreeStartDate} - ${degreeEndDate}`, 50, (height += 20));
-        height += 1; // Add space between degree dates and years list
+        height += 1; // Add space between degree dates and year
         Years &&
           myPDF
             .text(" ", 50, (height += 8))
@@ -202,10 +202,10 @@
             .fillColor("black")
             .fontSize(11)
             .list(Years, { bulletRadius: 2.5 });
-        height += 60; // Add space after years list
+        height += 60; // Add space after year
       }
 
-      // Add hobbies section
+      // hobbies section
 
         addSection(hobbiesAndInterests, "");
         hobbiesAndInterestsArray.forEach((hobby) => {

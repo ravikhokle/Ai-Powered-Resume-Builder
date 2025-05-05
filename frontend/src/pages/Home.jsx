@@ -35,14 +35,6 @@ const Home = () => {
             </div>
             <NormalButton url="/simple-resume" name="Create" />
           </div>
-          {/* <hr className="my-5" />
-          <div>
-            <h2 className="text-2xl font-bold my-2 py-2">Exprienced</h2>
-            <div>
-              <PDFViewer url={SimpleResume} />
-            </div>
-            <NormalButton url="/" name="Coming Soon..." />
-          </div> */}
         </div>
       </div>
     </div>

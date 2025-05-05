@@ -31,7 +31,7 @@ const Footer = () => {
             <Github className="h-6 w-6" />
           </a>
           <a
-            href="https://www.instagram.com/ravikhokle5/"
+            href="https://www.instagram.com/ravi__khokle/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-600 hover:text-blue-600"
