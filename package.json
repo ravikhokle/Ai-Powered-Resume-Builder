@@ -1,0 +1,8 @@
+{
+  "name": "ai-powered-resume-root",
+  "private": true,
+  "scripts": {
+    "start": "cd backend && npm start",
+    "heroku-postbuild": "cd backend && npm install"
+  }
+}
