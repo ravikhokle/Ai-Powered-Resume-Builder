@@ -38,7 +38,7 @@ const Contact = () => {
               ravikhokle1@gmail.com
             </a>
           </li>
-          <li>📍 Address: Parbhani, India - 431401</li>
+          <li>📍 Address: Pune, India</li>
         </ul>
       </div>
 

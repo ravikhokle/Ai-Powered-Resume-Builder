@@ -5,10 +5,6 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import SimpleResume from "./pages/SimpleResume";
 import IntermediateResume from "./pages/IntermediateResume";
-import Register from "./pages/Register";
-import Login from "./pages/Login";
-import Profile from "./pages/Profile";
-import PrivateRoute from "./components/PrivateRoute";
 import About from "./pages/About";
 import Contact  from "./pages/Contact";
 
@@ -18,13 +14,10 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/simple-resume" element={<PrivateRoute><SimpleResume /></PrivateRoute>} />
-        <Route path="/intermediate-resume" element={<PrivateRoute><IntermediateResume /></PrivateRoute>} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/simple-resume" element={<SimpleResume />} />
+        <Route path="/intermediate-resume" element={<IntermediateResume />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
       </Routes>
       <Footer />
     </>

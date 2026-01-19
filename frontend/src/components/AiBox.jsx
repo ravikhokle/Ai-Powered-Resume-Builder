@@ -60,8 +60,17 @@ const AiBox = () => {
       const { data } = await axios.post(url, { prompt: input });
       setResponse(data.text || "No response received.");
     } catch (err) {
-      setError("An error occurred. Please try again.");
-      console.error(err);
+      const message =
+        err?.response?.data?.error ||
+        err?.response?.data?.message ||
+        "An error occurred. Please try again.";
+      setError(message);
+      setResponse(
+        err?.response?.data?.details
+          ? JSON.stringify(err.response.data.details, null, 2)
+          : ""
+      );
+      console.error("Ask AI error:", err?.response?.data || err);
     } finally {
       setLoading(false);
     }
